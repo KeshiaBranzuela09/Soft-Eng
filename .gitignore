@@ -1,0 +1,17 @@
+# -------------------------
+# Laravel / PHP
+# -------------------------
+vendor/
+.env
+.env.*.backup
+.phpunit.result.cache
+storage/*.key
+
+# -------------------------
+# Node.js / Angular
+# -------------------------
+node_modules/
+dist/
+tmp/
+*.log
+g
