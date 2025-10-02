@@ -18,7 +18,7 @@
         </form>
     </div>
     <div class="col-md-2 text-end">
-        <a href="{{ route('manageuser.create') }}"class="btn btn-primary">Add</a>
+        <a href="{{ route('admin.manageuser.create') }}"class="btn btn-primary">Add</a>
     </div>
 </div>
 

@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="card p-4 shadow-sm">
                 <h3>Add New User</h3>
-                <form action="{{ route('manageuser.store') }}" method="POST">
+                <form action="{{ route('admin.manageuser.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -22,7 +22,7 @@
                         <input type="password" name="password" id="password" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Add User</button>
-                    <a href="{{ route('manageuser.index') }}" class="btn btn-secondary">Back</a>
+                    <a href="{{ route('admin.manageuser.index') }}" class="btn btn-secondary">Back</a>
                 </form>
             </div>
         </div>

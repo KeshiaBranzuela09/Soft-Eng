@@ -1,24 +1,42 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\SearchQery\SearchQueryController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\ManageUsersController;
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 
+Route::get('/', [SearchQueryController::class, 'index'])->name('query.index');
 
-Route::prefix('/admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/storage', [StorageController::class, 'index'])->name('admin.storage');
+Route::get('/login', [AuthenticationController::class, 'loginView'])->name('login.view');
+
+Route::post('/login/post', [AuthenticationController::class, 'authenticate'])->name('login.post');
+
+Route::prefix('/admin')->middleware('admin')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('/storage', [StorageController::class, 'index'])->name('admin.storage.index');
 
     // ManageUsers
-    Route::get('/manageuser', [ManageUsersController::class, 'index'])->name('manageuser.index');
-    Route::get('/manageuser/create', [ManageUsersController::class, 'addForm'])->name('manageuser.create');
-    Route::post('/manageuser/store', [ManageUsersController::class, 'store'])->name('manageuser.store');
+    Route::get('/manageuser', [ManageUsersController::class, 'index'])->name('admin.manageuser.index');
+    Route::get('/manageuser/create', [ManageUsersController::class, 'addForm'])->name('admin.manageuser.create');
+    Route::post('/manageuser/store', [ManageUsersController::class, 'store'])->name('admin.manageuser.store');
     // Route::get('/manageuser/{id}/edit', [ManageUsersController::class, 'edit'])->name('manageuser.edit');
     // Route::put('/manageuser/{id}', [ManageUsersController::class, 'update'])->name('manageuser.update');
     // Route::delete('/manageuser/{id}', [ManageUsersController::class, 'destroy'])->name('manageuser.destroy');
 
 
 
+});
+
+Route::prefix('/student')->middleware('student')->group(function () {
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard.index');
+});
+
+
+Route::prefix('/teacher')->middleware('teacher')->group(function () {
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard.index');
 });
 
 

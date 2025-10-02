@@ -2,24 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // so you can still use Auth
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'user_id'; // custom PK // why faller??? why custom pk?? when u can just use the id? and do hash manager *facepalm* -- norben
-    public $incrementing = true;
-    protected $keyType = 'int';
+    protected $table = 'users';
 
+    // Which fields can be mass-assigned
     protected $fillable = [
         'first_name',
         'last_name',
         'usn',
-        'password_hash',
         'email',
+        'password',
         'phone_number',
         'role',
         'profile_picture',
@@ -27,23 +26,31 @@ class User extends Authenticatable
         'is_active',
     ];
 
+    // Hide sensitive fields
     protected $hidden = [
-        'password_hash',
+        'password',
+        'remember_token',
     ];
 
-    // Relationships
-    public function studentDocuments()
+    // Cast fields to proper types
+    protected $casts = [
+        'is_active' => 'boolean',
+        'last_login' => 'datetime',
+    ];
+
+    // Role checkers (helper methods)
+    public function isStudent()
     {
-        return $this->hasMany(DocumentRepository::class, 'student_id', 'user_id');
+        return $this->role === 0;
+    }
+  
+    public function isTeacher()
+    {
+        return $this->role === 1;
     }
 
-    public function teacherDocuments()
+    public function isAdmin()
     {
-        return $this->hasMany(DocumentRepository::class, 'teacher_id', 'user_id');
-    }
-
-    public function approvedDocuments()
-    {
-        return $this->hasMany(DocumentRepository::class, 'approved_by', 'user_id');
+        return $this->role === 2;
     }
 }
